@@ -1,0 +1,14 @@
+register functionality 1
+sign in functionality  1
+post upload functionality 1
+get all post functionality 1
+comment on the post functionality 
+    1 create input field below every post and beside the input field create a button  onclick of a button you will call a function  ,  postID, userID and comment data  we need help of this three thing we will knoe who sis posting this thing and who is commment on th epost
+
+    backend 
+    1 first find the specific postid which came from the body when successfully find the post document under the comment key insert userid and commemt data as an object
+like the post functionality
+delete the post functionality
+edit the post functionality
+edit profile functionality
+sign out functionality 1

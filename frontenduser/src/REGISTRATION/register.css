@@ -1,0 +1,38 @@
+.main_div{
+    border: none red 1px;
+    width: 400px;
+    text-align: center;
+    color: white;
+    background: black;
+    border-radius: 6px;
+    margin: auto;
+}
+
+.text_field{
+    margin-top: 10px;
+    
+    
+}
+
+input{
+    padding: 6px 13px;
+    width: 70%;
+    margin: 5px;
+    border-radius: 5px;
+    /* border: none; */
+}
+
+
+.Link{
+    border: none;
+    width: 150px;
+    height: 30px;
+    margin-bottom: 40px;
+    border-radius: 7px;
+    margin-top: 20px;
+    background: skyblue;
+    font-family: sans-serif;
+
+
+}
+

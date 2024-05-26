@@ -1,0 +1,51 @@
+.head-container {
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .link-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f4f4f4;
+    padding: 10px;
+    margin-bottom: 50px;
+  }
+  
+  .link-container h1 {
+    font-size: 24px;
+  }
+  
+  .icon-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .icon-container a,
+  .icon-container button {
+    margin-right: 10px;
+    color: white;
+    background-color: #333;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  .icon-container a:hover,
+  .icon-container button:hover {
+    background-color: #555;
+  }
+  
+  .icon-container button {
+    color: #333;
+    background-color: #f4f4f4;
+  }
+  
+  .icon-container button:hover {
+    background-color: #ddd;
+   
+  }

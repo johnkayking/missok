@@ -1,0 +1,24 @@
+/* Footer.css */
+
+.footer-container {
+    background-color: #333; /* Dark background color */
+    color: #fff; /* Text color */
+    padding: 20px; /* Add some padding */
+    text-align: center; /* Center-align the content */
+    margin-top: 100px;
+  }
+  
+  .footer-container h2 {
+    margin: 0; /* Remove default margin */
+  }
+  
+  /* Optional: Add some style to the footer links */
+  .footer-container a {
+    color: #fff; /* Text color for links */
+    text-decoration: none; /* Remove underline */
+  }
+  
+  .footer-container a:hover {
+    text-decoration: underline; /* Add underline on hover */
+  }
+  

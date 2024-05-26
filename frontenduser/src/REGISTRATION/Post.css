@@ -1,0 +1,45 @@
+.post-container {
+    width: 100%;
+    max-width: 500px; /* Adjust max-width as needed */
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .post-container label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .post-container input[type='text'],
+  .post-container textarea,
+  .post-container button,
+  .post-container input[type='file'] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+  
+  .post-container button {
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  .post-container button:hover {
+    background-color: #0056b3;
+  }
+  
+  .like-button {
+    background-image: url('../REGISTRATION/like.png');
+    width: 40px;
+    height: 40px;
+    background-size: cover;
+    border: none;
+    cursor: pointer;
+  }
+  

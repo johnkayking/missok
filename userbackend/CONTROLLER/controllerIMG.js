@@ -1,25 +1,24 @@
 const asyncwrapper = require("../MIDDLEWARE/async")
 const user = require("../SCHEMA/imageShema")
-const {S3Client, PutObjectCommand, DeleteObjectCommand,GetObjectCommand} = require("@aws-sdk/client-s3")
+const { S3Client, PutObjectCommand, DeleteObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3")
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
-const {sharp} = require("sharp")
+const { sharp } = require("sharp")
 // const crypto = require("crpto")
 
 
 
 // crypto give us unique number for image in order for the image in the S3 bucket not overide by another image in the s3 bucket 
 // const ramdomimagename =(bytes = 20)=>crypto.randomBytes(bytes).toString("hex")
-    
+
 
 
 
 const s3 = new S3Client({
-    credentials :{
-        
-        secretAccessKey : "I5ghrJWe0VwRP304kkat1NjIjzLAvJXA6hx01oP3",
+    credentials: {
+        secretAccessKey: "I5ghrJWe0VwRP304kkat1NjIjzLAvJXA6hx01oP3",
     },
 
-    region :"eu-north-1"
+    region: "eu-north-1"
 })
 
 
@@ -53,30 +52,30 @@ const updateUser = asyncwrapper(async (req, res) => {
     // const imageBuffer = await sharp(req.file.buffer).resize({height :1920,width:1080,fit : "content"}).tobuffer() 
 
     const userS3image = `${Date.now()}-${req.file.originalname}`
-  console.log(userS3image)
+    console.log(userS3image)
     let params = {
-        Bucket : "owodemobucket",
-        Key :userS3image ,
-        body : req.file.buffer,
-     
-        contentType : req.file.mimetype
+        Bucket: "owodemobucket",
+        Key: userS3image,
+        body: req.file.buffer,
+
+        contentType: req.file.mimetype
 
     }
 
     const command = new PutObjectCommand(params)
     await s3.send(command)
 
-    const updateUserInfo = await user.findByIdAndUpdate({ _id: userID }, 
+    const updateUserInfo = await user.findByIdAndUpdate({ _id: userID },
 
-        { 
-            fname:req.body.fname,
-            lname:req.body.lname,
-            email:req.body.email,
-            dob:req.body.dob,
-            age:req.body.age,
-            state : req.body.state,
-            country : req.body.country,
-            photo :userS3image
+        {
+            fname: req.body.fname,
+            lname: req.body.lname,
+            email: req.body.email,
+            dob: req.body.dob,
+            age: req.body.age,
+            state: req.body.state,
+            country: req.body.country,
+            photo: userS3image
         }
 
 
@@ -93,25 +92,25 @@ const updateUser = asyncwrapper(async (req, res) => {
 const getUser = asyncwrapper(async (req, res) => {
     const getAlluser = await user.find({}).lean()
 
-   
-    for(const Alluser of getAlluser){
-        if(Alluser.photo){
+
+    for (const Alluser of getAlluser) {
+        if (Alluser.photo) {
             console.log("all my photo", Alluser)
-            let getObjectParams ={
-                Bucket : "owodemobucket",
-                Key : Alluser.photo
+            let getObjectParams = {
+                Bucket: "owodemobucket",
+                Key: Alluser.photo
+            }
+            const command = new GetObjectCommand(getObjectParams);
+            const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+            console.log("ur", url)
+            Alluser.url = url
+
         }
-        const command = new GetObjectCommand(getObjectParams);
-        const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
-        console.log("ur",url)
-        Alluser.url = url
-        
-        }
-    
-     
+
+
 
     }
-   
+
     // console.log(getAlluser)
 
     res.status(200).json({ msg: "successfully get user", getAlluser })
@@ -132,15 +131,15 @@ const getsingleUser = asyncwrapper(async (req, res) => {
 const deleteUser = asyncwrapper(async (req, res) => {
     const { id: userID } = req.params
 
-     
+
     const deleteuserInfo = await user.findByIdAndDelete({ _id: userID })
     if (!deleteuserInfo) {
         res.status(500).json({ msg: `this id doest not exist,${userID}` })
     }
-    
+
     const params = {
-        Bucket :  "owodemobucket",
-        Key : userS3image,
+        Bucket: "owodemobucket",
+        Key: userS3image,
     }
 
     const command = new DeleteObjectCommand(params)

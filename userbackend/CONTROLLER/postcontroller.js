@@ -10,10 +10,8 @@ const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
 const s3 = new S3Client({
     credentials: {
-       
         secretAccessKey: "I5ghrJWe0VwRP304kkat1NjIjzLAvJXA6hx01oP3",
     },
-
     region: "eu-north-1"
 })
 
@@ -22,7 +20,7 @@ const s3 = new S3Client({
 const createPost = asyncwrapper(async (req, res) => {
     console.log(req.file)
     console.log(req.body)
-    
+
 
     let postimage = `${Date.now()}-${req.file.originalname}`
     let params = {
@@ -77,6 +75,7 @@ const allPostUser = asyncwrapper(async (req, res) => {
 
         const command = new GetObjectCommand(getparams)
         const url = await getSignedUrl(s3, command)
+        console.log("url", url)
         singlePost.url = url
 
     }
@@ -84,49 +83,47 @@ const allPostUser = asyncwrapper(async (req, res) => {
     return res.status(200).json({ msg: "singlepost successfull", postuser: postsingleuser })
 })
 
-const singlePost =asyncwrapper (async(req,res)=>{
-    const {id: userID} = req.params
-    const getspecificUser = await NewPost.findOne({id:new mongoose.Types.ObjectId(userID)}).lean()
-    if(!getspecificUser){
-        res.status(404).json({msg:`this user are id is not found ${userID}`})
+const singlePost = asyncwrapper(async (req, res) => {
+    const { id: userID } = req.params
+    const getspecificUser = await NewPost.findOne({ id: new mongoose.Types.ObjectId(userID) }).lean()
+    if (!getspecificUser) {
+        res.status(404).json({ msg: `this user are id is not found ${userID}` })
     }
-    res.status(200).json({msg:"successfuly upload a specific user", data:getspecificUser})
+    res.status(200).json({ msg: "successfuly upload a specific user", data: getspecificUser })
 
 })
 
-const commentpost = asyncwrapper(async(req,res)=>{
-    const {id :userID} =req.params
-    const {id :postID} = req.params
-    console.log("my postid",req.params)
-    console.log("my body",req.body)
-    console.log("this is the body",req.body.comment)
-    const postcomm = await NewPost.findById({_id:postID}, 
-     data={
-          userID:new mongoose.Types.ObjectId(userID), comment : req.body.comment
-      
-       
+const commentpost = asyncwrapper(async (req, res) => {
+    const { id: userID } = req.params
+    const { postID } = req.body
+    console.log("req.body", req.body)
+    const postcomm = await NewPost.findById({ _id: new mongoose.Types.ObjectId(postID) })
+
+    if (postcomm === null) {
+        return res.status(404).json({ message: "post not found", messageType: "not_found" })
+    }
+
+    postcomm.comment = [...postcomm.comment, { commentData: req.body.comment, userId: req.body.userID }]
+
+    let updatedPost = await postcomm.save()
+
+    res.status(200).json({ msg: "successfuly post", updatedPost })
+})
+
+
+const likecomment = (asyncwrapper(async (req, res) => {
+    const { id = userID } = req.params
+    const mylike = await newuser.findById({
+        upvote: req.boby.upvote,
+        userID: req.body._id
+
     })
-    console.log("new data", postcomm)
-  
-
-    console.log("this data is coming from frontend",data)
-    res.status(200).json({msg:"successfuly post", data, postcomm})
-})
-
-
-const likecomment=(asyncwrapper(async(req,res)=>{
-    const {id = userID} =req.params
-const mylike =  await newuser.findById({
-  upvote:req.boby.upvote,
-  userID : req.body._id
-  
-})
-if(!mylike){
-    res.status(404).json({msg:`this id does not match ${userID}`})
-}
-res.status(200).json({msg:"like is successfully updated", likeInfo: mylike})
+    if (!mylike) {
+        res.status(404).json({ msg: `this id does not match ${userID}` })
+    }
+    res.status(200).json({ msg: "like is successfully updated", likeInfo: mylike })
 }))
 
 
-module.exports = { createPost,allPostUser, singlePost,commentpost,likecomment }
+module.exports = { createPost, allPostUser, singlePost, commentpost, likecomment }
 

@@ -3,7 +3,9 @@ const user = require("../SCHEMA/imageShema")
 const { S3Client, PutObjectCommand, DeleteObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3")
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const { sharp } = require("sharp")
-// const crypto = require("crpto")
+
+const jwt = require('jsonwebtoken')
+
 
 
 
@@ -172,36 +174,36 @@ const createRegister = asyncwrapper(async (req, res) => {
 
 
 const loginAuthentication = asyncwrapper(async (req, res) => {
-    const userLogin = await user.find({ email: req.body.email })
-    console.log(userLogin)
-    console.log(req.body.email)
-    console.log(req.body)
-    console.log(req.body.password)
 
-    console.log(userLogin.length)
+    const userLogin = await user.find({ email: req.body.email })
+
     if (userLogin.length == 0) {
         return res.status(404).json({ msg: "email does not exist", status: false })
-
     }
+
     const userData = {
         _id: userLogin[0]._id,
         fname: userLogin[0].fname,
         lname: userLogin[0].lname,
         email: userLogin[0].email
     }
-    console.log(userData)
+
+
 
     if (userLogin[0].password == req.body.password) {
 
-        return res.status(200).json({ msg: "Succefully Login", status: true, user: userData })
+
+        let token = jwt.sign({ email: userLogin[0].email }, "asios", {
+            algorithm: 'HS256',
+            expiresIn: "36000000"
+        })
+
+        console.log("token", token)
+
+        return res.status(200).json({ msg: "Succefully Login", status: true, user: userData, token: token })
     }
-
     return res.status(200).json({ msg: "invalid_password", status: false })
-
-
-
 })
-
 
 module.exports =
 {

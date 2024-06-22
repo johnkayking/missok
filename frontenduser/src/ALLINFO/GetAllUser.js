@@ -3,19 +3,22 @@ import axios from 'axios'
 
 function GetAllUser() {
 
-    const [getAllUser, setgetAllUser] = useState([])
+  const [getAllUser, setgetAllUser] = useState([])
 
-
-    const allUser = async() =>{
-        let result = await axios.get("http://localhost:7003/api/v2/get-user"
-        
-        ) 
-        console.log(result.getUser)
-    }
-
-    useEffect(()=>{
-        allUser()
+  let token = localStorage.getItem("token")
+  const allUser = async () => {
+    let result = await axios.get("http://localhost:7003/api/v2/get-user", {
+      headers: {
+        Authorization: token()
+      }
     })
+
+    console.log(result.getUser)
+  }
+
+  useEffect(() => {
+    allUser()
+  })
   return (
     <div>
       <table>
@@ -28,19 +31,19 @@ function GetAllUser() {
           <th>DOB</th>
         </thead>
         <tbody>
-        {
-       getAllUser.map((value,index)=>{
-        return <tr key={value.id}>
-          <td>{index+1}</td>
-          <td>{value.name}</td>
-        </tr>
-       }) 
-      }
+          {
+            getAllUser.map((value, index) => {
+              return <tr key={value.id}>
+                <td>{index + 1}</td>
+                <td>{value.name}</td>
+              </tr>
+            })
+          }
 
         </tbody>
       </table>
-     
-        
+
+
     </div>
   )
 }

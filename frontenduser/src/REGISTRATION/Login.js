@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import {  useNavigate } from 'react-router-dom'
+import { json, useNavigate } from 'react-router-dom'
 
 function Login({ setIsLoginPage }) {
     const [email, setemail] = useState("")
     const [password, setpassword] = useState("")
-    const [error,seterror] = useState("")
+    const [error, seterror] = useState("")
     const [emailmsg, setemailmsg] = useState("")
 
 
@@ -26,7 +26,8 @@ function Login({ setIsLoginPage }) {
             if (data.status) {
                 localStorage.setItem("user", data.status)
                 setIsLoginPage(true)
-                localStorage.setItem("userList" , JSON.stringify(data.user))
+                localStorage.setItem("userList", JSON.stringify(data.user))
+                localStorage.setItem("token", data.token)
                 setemailmsg("email dose not match")
                 allNavigete("/home")
                 return

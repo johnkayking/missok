@@ -8,6 +8,10 @@ const {
   loginAuthentication
 } = require("../CONTROLLER/controllerIMG");
 
+const {nameOfTheFunction} = require("../MIDDLEWARE/jwtverfication.middleware")
+
+
+
 
 // const {S3Client} = require('@aws-sdk/client-s3');
 const multer = require('multer');
@@ -34,12 +38,17 @@ const Upload =multer({storage:storage})
 // Multer S3 configuration
 
   
-route.get("/get-user", getUser);
-route.get("/get-single-user/:id", getsingleUser);
+route.get("/get-user",nameOfTheFunction,getUser);
+route.get("/get-single-user/:id", nameOfTheFunction,getsingleUser);
 route.delete("/detete-user/:id", deleteUser);
 route.patch("/update/:id/",Upload.single("photo"), updateUser);
+
+
 route.route("/register").post(createRegister);
-route.route("/login").post(loginAuthentication);
+
+
+
+route.post("/login", loginAuthentication)
 
 module.exports = route;
 
